@@ -20,11 +20,28 @@ var UiElements = function(){
 		var resultPanelMain = document.createElement("div"); 
 		resultPanelMain.id = "res-panel-"+ HelpFunctions.getNextId();
 		resultPanelMain.className = "inline-panel";
+	
+
 		var headLine = document.createElement("h2");
-		headLine.textContent = res.fileName;
+		if(res.fileName != "")
+			headLine.textContent = res.fileName;
+		else if(res.time != "")
+			headLine.textContent = res.time;
+		else
+			headLine.textContent = "file" + GpxLoader.nextValue();
+		
+		var flavourBar = document.createElement("div");
+		flavourBar.className = "flavourbar";
+
+		var detailButton = document.createElement("a");
+		detailButton.href="#";
+		detailButton.textContent = "read more";
+		
+		resultPanelMain.appendChild(flavourBar);
 		resultPanelMain.appendChild(headLine);
+		resultPanelMain.appendChild(detailButton);
 
-
+		
 		$("#inline-item-main").append(resultPanelMain);
 	}
 

@@ -17,15 +17,22 @@ var GpxLoader = function(){
     }
 
     function handleGpx(xFile){
-        var data = new DOMParser();
-        data = data.parseFromString(xFile, "application/xml");
-
         var item = xmlDoc = $.parseXML(xFile),
-            $xml = $(xmlDoc),
-            v = $xml.find("gpx").attr("version"),
-            fileName = $xml.find("gpx").find("name")[0].textContent,
-            segName = $xml.find("wpt").find("name")[0].textContent,
-            trkName = $xml.find("trk").find("name")[0].textContent;
+            $xml = $(xmlDoc);
+            var v = "";
+
+            try{
+                v = $xml.find("gpx").attr("version");
+            } catch(e){
+                console.log("FATAL ERROR - CANNOT READ VERSION OF GPX"); 
+            }
+
+
+            var fileName = readGpxValueDetail($xml, "gpx", "name");
+            var segName = readGpxValueDetail($xml, "wpt", "name");
+            var trkName = readGpxValueDetail($xml, "trk", "name");
+            var time = new Date(readGpxValueDetail($xml,"metadata", "time"));
+            var points = readTrkSegment($xml);
 
         
         var itemParsed = {
@@ -33,6 +40,8 @@ var GpxLoader = function(){
             fileName : fileName,
             segName : segName,
             trkName : trkName,
+            time : time,
+            points : points,
             xml : $xml
         };
 
@@ -47,19 +56,55 @@ var GpxLoader = function(){
                 UiElements.createFilePanel(itemParsed, VersionEnums.V1);
                 break;
 
+            case "1.1":
+                UiElements.createFilePanel(itemParsed, VersionEnums.V1_1);
+                break;
+
             default:
-                console.log("TODO: ERROR FINDING RIGHT VERSION");
+                console.log("FATAL: ERROR FINDING RIGHT VERSION");
                 break; 
         }
     }
 
+    function readGpxValueDetail(file, namespace, val){
+        var x = ""; 
+        try{
+           x = file.find(namespace).find(val)[0].textContent;
+           console.log(x);
+        } catch(e){
+            x = ""; 
+        }
+        return x;
+    }
+
+
+    function readTrkSegment(file){
+        var t = {};
+        t.lon = [];
+        t.lat = [];
+
+        file.find("trkseg").find("trkpt").each(function(i){
+            t.lat.push($(this).attr("lat"));
+            t.lon.push($(this).attr("lon"));
+        })
+        return t;
+    }
+    
+    var i = 0; 
+    function nextValue(){
+        i++;
+        return i;
+    }
+
     return {
-        loadGpx : loadGpx
+        loadGpx : loadGpx,
+        nextValue : nextValue,
     }
 }();
 
 
 var VersionEnums = {
     V1 : 1,
-    V2 : 2,
+    V1_1 : 2,
+    V2 : 3,
 }; 
