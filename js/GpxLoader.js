@@ -17,33 +17,38 @@ var GpxLoader = function(){
     }
 
     function handleGpx(xFile){
-        var item = xmlDoc = $.parseXML(xFile),
-            $xml = $(xmlDoc);
-            var v = "";
+        try{
+            var item = xmlDoc = $.parseXML(xFile),
+                $xml = $(xmlDoc);
+                var v = "";
 
-            try{
-                v = $xml.find("gpx").attr("version");
-            } catch(e){
-                console.log("FATAL ERROR - CANNOT READ VERSION OF GPX"); 
-            }
+                try{
+                    v = $xml.find("gpx").attr("version");
+                } catch(e){
+                    console.log("FATAL ERROR - CANNOT READ VERSION OF GPX"); 
+                }
 
 
-            var fileName = readGpxValueDetail($xml, "gpx", "name");
-            var segName = readGpxValueDetail($xml, "wpt", "name");
-            var trkName = readGpxValueDetail($xml, "trk", "name");
-            var time = new Date(readGpxValueDetail($xml,"metadata", "time"));
-            var points = readTrkSegment($xml);
+                var fileName = readGpxValueDetail($xml, "gpx", "name");
+                var segName = readGpxValueDetail($xml, "wpt", "name");
+                var trkName = readGpxValueDetail($xml, "trk", "name");
+                var time = new Date(readGpxValueDetail($xml,"metadata", "time"));
+                var points = readTrkSegment($xml);
 
-        
-        var itemParsed = {
-            version : v,
-            fileName : fileName,
-            segName : segName,
-            trkName : trkName,
-            time : time,
-            points : points,
-            xml : $xml
-        };
+
+            var itemParsed = {
+                version : v,
+                fileName : fileName,
+                segName : segName,
+                trkName : trkName,
+                time : time,
+                points : points,
+                xml : $xml
+            };
+        } catch(e){
+            console.log(e);
+            return;
+        }
 
         
         if(itemParsed.version == undefined){
