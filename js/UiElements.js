@@ -21,7 +21,6 @@ var UiElements = function(){
 		resultPanelMain.id = "res-panel-"+ HelpFunctions.getNextId();
 		resultPanelMain.className = "inline-panel";
 	
-
 		var headLine = document.createElement("h2");
 		if(res.fileName != "")
 			headLine.textContent = res.fileName;
@@ -65,9 +64,9 @@ var UiElements = function(){
 	function setMainPopupPanel(res){
 		var panel = getMainPopupPanel();
 		var contentPanel = document.getElementById("content-popup-panel");
-		contentPanel.textContent = res.fileName;	
-
+		contentPanel.innerHTML = "<h2>" + res.fileName + "</h2>" ;
 		console.log(res);
+		
 
 		panel.style.display = "block";
 	}
@@ -81,18 +80,31 @@ var UiElements = function(){
 		//css options
 		mainPanel.className = "popup";
 
+		var flavourImgDiv = document.createElement("div");
+		flavourImgDiv.id = "content-popup-flavourdiv";
+		flavourImgDiv.className = "popup-flavour";
+				
+		var flavourImg = document.createElement("img");
+		flavourImg.id="content-popup-flavourimg";
+		
+		
 		var mainPanelContent = document.createElement("div");
 		var contentPanel = document.createElement("div");
 		contentPanel.id = "content-popup-panel";
 		contentPanel.style.position = "relative";
 		contentPanel.style.marginRight = "30px";
 
+
 		var closeButton = document.createElement("button");
 		closeButton.textContent = "X";
 		closeButton.style.position = "absolute";
+		closeButton.style.top = "0px";
 		closeButton.style.right = "0px";
 		closeButton.id = "panel-close";
 
+
+		flavourImgDiv.appendChild(flavourImg);
+		mainPanelContent.appendChild(flavourImgDiv);
 		mainPanelContent.appendChild(closeButton);
 		mainPanelContent.appendChild(contentPanel)
 		mainPanel.appendChild(mainPanelContent);

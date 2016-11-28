@@ -95,6 +95,18 @@ div.popup {
 
 }
 
+div.popup-flavour{
+  background-image("../resources/img/1.jpg");
+  width: 200px;
+  height: 100px;
+  background-position: center;
+  /* Make the background image cover the area of the <div>, and clip the excess */
+  background-size: cover;
+  background-image: "../resources/img/1.jpg";
+}
+
+
+/* Scroll bar */
 ::-webkit-scrollbar {
   width: 4px;
   height: 4px;
